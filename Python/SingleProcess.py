@@ -1,6 +1,5 @@
 import threading
 import copy
-
 from LCG import LCG
 
 
@@ -64,7 +63,6 @@ def run_simulation(num_accounts, num_clients, num_operations, seed, min_starting
     for thread in threads:
         thread.join()
 
-
     print(server.accounts_to_string())
 
 if __name__ == "__main__":
@@ -72,8 +70,8 @@ if __name__ == "__main__":
     num_clients = 10
     num_operations = 1000
     seed = "42"
-    min_starting_balance = 0
-    max_starting_balance = 1000
+    min_starting_balance = 500
+    max_starting_balance = 10000
     min_transfer_amount = 0
     max_transfer_amount = 300
 
