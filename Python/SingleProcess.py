@@ -1,6 +1,4 @@
 import threading
-import time
-import logging
 import copy
 
 from LCG import LCG
@@ -20,27 +18,20 @@ class BankServer:
                     self.accounts[from_account] -= amount
                     self.accounts[to_account] += amount
 
-    def log(self, start_time, end_time, num_accounts, num_clients, num_transfers_per_client):
+    def accounts_to_string(self):
         with self.lock:
-            logMsg = f"Python - Single Process / Threads\n"
-            logMsg += f"Execution time: {end_time - start_time:.5f} seconds\n"
-            logMsg += f"Number of accounts: {num_accounts}, Number of clients: {num_clients}, Number of transfers per client: {num_transfers_per_client}\n"
-
             total_balance_end = sum(self.accounts.values())
             total_balance_start = sum(self.initial_accounts.values())
 
-            logMsg += f"{'Consistency check passed' if total_balance_start == total_balance_end else 'Consistency check failed'}"
-            logMsg += f". Total balance at start and end are equal: {total_balance_end}\n"
+            accounts_balance = []
 
-            logMsg += "{:<10}{:<20}{:<20}\n".format("Konto", "Balance Start", "Balance End")
+            accounts_balance.extend([total_balance_start, total_balance_end])
 
-            for k, v in self.initial_accounts.items():
-                logMsg += "{:<10}{:<20}{:<20}\n".format(k, v, self.accounts[k])
+            for key in sorted(set(self.accounts.keys()) & set(self.initial_accounts.keys())):
+                accounts_balance.extend([self.initial_accounts[key], self.accounts[key]])
 
-            logging.basicConfig(filename='log.txt', filemode='a', format='%(asctime)s - %(levelname)s - %(message)s',
-                                level=logging.INFO)
-
-            logging.info(logMsg)
+            result_string = "[" + ", ".join(map(str, accounts_balance)) + "]"
+            return result_string
 
 
 class BankClient:
@@ -65,8 +56,6 @@ def run_simulation(num_accounts, num_clients, num_operations, seed, min_starting
     server = BankServer(num_accounts, min_starting_balance, max_starting_balance, random_generator.get_next_number(1000))
     clients = [BankClient(server, num_operations, min_transfer_amount, max_transfer_amount, random_generator.get_next_number(1000)) for _ in range(num_clients)]
 
-    start_time = time.time()
-
     threads = [threading.Thread(target=client.run_operations) for client in clients]
 
     for thread in threads:
@@ -75,9 +64,8 @@ def run_simulation(num_accounts, num_clients, num_operations, seed, min_starting
     for thread in threads:
         thread.join()
 
-    end_time = time.time()
 
-    server.log(start_time, end_time, num_accounts, num_clients, num_operations)
+    print(server.accounts_to_string())
 
 if __name__ == "__main__":
     num_accounts = 5

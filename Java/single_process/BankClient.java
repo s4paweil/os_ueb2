@@ -25,7 +25,6 @@ public class BankClient extends Thread{
             int amount = randomGenerator.getNextNumberBetween(minTransferAmount, maxTransferAmount);
 
             server.transfer(fromAccount, toAccount, amount);
-            //System.out.println("From Account: " + fromAccount + ", To Account: " + toAccount + ", Amount: " + amount);
         }
     }
 }

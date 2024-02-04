@@ -1,8 +1,3 @@
-import java.io.IOException;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
-import java.util.logging.Logger;
-
 public class Main {
 
     static int numAccounts; // Anzahl der Konten
@@ -14,8 +9,6 @@ public class Main {
     static int minTransferAmount; // Minimaler Betrag pro Überweisung
     static int maxTransferAmount; // Maximaler Betrag pro Überweisung
 
-
-    private static Logger logger = Logger.getLogger(BankServer.class.getName());
 
     public static void main(String[] args) {
         numAccounts = 5; // Anzahl der Konten
@@ -35,8 +28,6 @@ public class Main {
         Thread serverThread = new Thread(server);
         serverThread.start();
 
-        long startTime = System.currentTimeMillis();
-
         Thread[] clientThreads = new Thread[numClients];
         for (int i = 0; i < clientThreads.length; i++) {
             BankClient client = new BankClient(server, numTransfersPerClient, randomSeedGenerator.getNextNumber(1000), numAccounts, minTransferAmount, maxTransferAmount);
@@ -52,35 +43,7 @@ public class Main {
             }
         }
 
-        long endTime = System.currentTimeMillis();
-        long runTime = endTime - startTime;
-
-
-        log(server, runTime);
+        System.out.println(server.accountToString());
         serverThread.interrupt();
-
-
-    }
-
-    public static void log(BankServer server, long runTime){
-        String logMsg = "Java - Single Process / Threads\n" +
-                "Config: #Clients: " + numClients + ", #Transfers per Client: " + numTransfersPerClient + ", Seed: " + seed + "\n" +
-                "Laufzeit " + runTime +  " Millisekunden\n";
-
-        logMsg += server.getLog();
-
-
-
-        try {
-            Handler fileHandler = new FileHandler("log.txt", true);
-
-            fileHandler.setFormatter(new java.util.logging.SimpleFormatter());
-
-            logger.addHandler(fileHandler);
-
-            logger.info(logMsg);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

@@ -1,13 +1,8 @@
 import java.util.Arrays;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
-import java.util.logging.Logger;
-import java.io.IOException;
 
 public class BankServer extends Thread{
     private int[] accounts;
     private int[] accountsStartconfig;
-    private static Logger logger = Logger.getLogger(BankServer.class.getName());
 
     public BankServer(int numAccounts, int seed, int minStartBalance, int maxStartBalance) {
         accounts = new int[numAccounts];
@@ -51,23 +46,17 @@ public class BankServer extends Thread{
     }
 
 
-    public String getLog(){
-        String logMsg = "";
-
+    public String accountToString(){
         int totalMoneyStart = countTotalMoney(accountsStartconfig);
         int totalMoneyEnd = countTotalMoney(accounts);
 
-        if (totalMoneyStart == totalMoneyEnd) {
-            logMsg += "Konten sind konsistent! Gesamtbetrag zu Beginn entspricht dem Betrag zum Ende (" + totalMoneyStart + ")\n";
-        } else {
-            logMsg += "Konten sind nicht konsistent! Betrag zu Beginn " + totalMoneyStart + " versus Betrag zum Ende " + totalMoneyEnd + "\n";
-        }
+        String accountsToString = "[" + totalMoneyStart + ", " + totalMoneyEnd;
 
-        logMsg += String.format("%-20s%-20s%-20s\n", "Konten", "Balance start", "Balance end");
         for (int i = 0; i < accountsStartconfig.length; i++) {
-            logMsg += String.format("%-20s%-20s%-20s\n", "Konto " + (i + 1), accountsStartconfig[i], accounts[i]);
+            accountsToString += ", " + accountsStartconfig[i] + ", " + accounts[i];
         }
 
-        return logMsg;
+        accountsToString += "]";
+        return accountsToString;
     }
 }
