@@ -1,3 +1,5 @@
+package org.betriebssysteme;
+
 import java.util.Arrays;
 
 public class BankServer extends Thread{

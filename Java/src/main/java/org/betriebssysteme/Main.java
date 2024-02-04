@@ -1,3 +1,5 @@
+package org.betriebssysteme;
+
 public class Main {
 
     static int numAccounts; // Anzahl der Konten

@@ -1,3 +1,5 @@
+package org.betriebssysteme;
+
 class LCG {
     private long state;
     private final int a = 1664525;

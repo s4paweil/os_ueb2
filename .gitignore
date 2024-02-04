@@ -60,6 +60,9 @@ Thumbs.db
 *.sublime-workspace
 *.sublime-project
 
+# Maven target directory
+target/
+
 # Logs
 *.log
 *.log.*

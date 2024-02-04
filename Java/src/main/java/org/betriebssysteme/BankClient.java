@@ -1,3 +1,5 @@
+package org.betriebssysteme;
+
 public class BankClient extends Thread{
 
     private BankServer server;
