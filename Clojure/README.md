@@ -7,7 +7,11 @@ Als Parameter müssen die folgenden Werte geordnet angegeben werden:
 - num-clients : Gibt die Anzahl der Clients/ Thread an.
 - num-transfers : Anzahl der Transfere, die von den Clients durchgeführt werden soll.
 - seed : Gibt den Seed an, um die Pseudorandomisierung zu vereinheitlichen.
+- min-start-balance: Minimaler Startwert für Konten
+- max-start-balance: Maximaler Startwert für Konten
+- min-transfers-amount: Minimaler Betrag bei Überweisungen
+- max-transfers-amount: Maximaler Betrag bei Überweisungen
 
 Ein Beispielaufruf könnte zum Beispiel wie folgt aussehen:
 
-    lein run -m bankkonto.core/main 10 5 100 seed    
+    lein run -m bankkonto.core/main 10 5 100 seed 500 1000 50 250
