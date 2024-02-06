@@ -81,7 +81,7 @@
           []
           (map vector accounts-start accounts-end)))
 
-(defn main [num-accounts-str num-clients-str num-transfers-str seed-str min-start-balance-str max-start-balance-str min-transfer-amount-str max-transfer-amount-str]
+(defn main [seed-str num-accounts-str min-start-balance-str max-start-balance-str min-transfer-amount-str max-transfer-amount-str num-clients-str num-transfers-str]
   (let [num-accounts (Integer/parseInt num-accounts-str)
         num-clients (Integer/parseInt num-clients-str)
         num-transfers (Integer/parseInt num-transfers-str)
@@ -111,6 +111,4 @@
       ;; Beenden der Agenten
       (shutdown-agents))))
 
-  
 
-;; Beispielaufruf: (main 10 5 100 ABC123)
