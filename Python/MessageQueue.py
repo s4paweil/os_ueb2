@@ -1,5 +1,7 @@
 import multiprocessing
 import copy
+import sys
+
 from LCG import LCG
 
 
@@ -62,14 +64,18 @@ def run_client(queue, num_operations, num_accounts, min_transfer_amount, max_tra
 
 
 if __name__ == "__main__":
-    num_accounts = 5
-    num_clients = 10
-    num_operations = 100
-    seed = "42"
-    min_starting_balance = 50000
-    max_starting_balance = 1000000
-    min_transfer_amount = 1
-    max_transfer_amount = 300
+    if len(sys.argv) != 9:
+        print("Usage: {} <seed>".format(sys.argv[0]))
+        sys.exit(1)
+
+    num_accounts = int(sys.argv[2])
+    num_clients = int(sys.argv[7])
+    num_operations = int(sys.argv[8])
+    seed = sys.argv[1]
+    min_starting_balance = int(sys.argv[3])
+    max_starting_balance = int(sys.argv[4])
+    min_transfer_amount = int(sys.argv[5])
+    max_transfer_amount = int(sys.argv[6])
 
     random_generator = LCG(seed)
     server_queue = multiprocessing.Queue()

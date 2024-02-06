@@ -1,3 +1,4 @@
+import sys
 import threading
 import copy
 from LCG import LCG
@@ -66,14 +67,18 @@ def run_simulation(num_accounts, num_clients, num_operations, seed, min_starting
     print(server.accounts_to_string())
 
 if __name__ == "__main__":
-    num_accounts = 5
-    num_clients = 10
-    num_operations = 1000
-    seed = "42"
-    min_starting_balance = 500
-    max_starting_balance = 10000
-    min_transfer_amount = 0
-    max_transfer_amount = 300
+    if len(sys.argv) != 9:
+        print("Usage: {} <seed>".format(sys.argv[0]))
+        sys.exit(1)
+
+    num_accounts = int(sys.argv[2])
+    num_clients = int(sys.argv[7])
+    num_operations = int(sys.argv[8])
+    seed = sys.argv[1]
+    min_starting_balance = int(sys.argv[3])
+    max_starting_balance = int(sys.argv[4])
+    min_transfer_amount = int(sys.argv[5])
+    max_transfer_amount = int(sys.argv[6])
 
     run_simulation(num_accounts, num_clients, num_operations, seed, min_starting_balance, max_starting_balance,
                    min_transfer_amount, max_transfer_amount)
