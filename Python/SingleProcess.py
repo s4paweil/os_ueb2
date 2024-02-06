@@ -68,7 +68,7 @@ def run_simulation(num_accounts, num_clients, num_operations, seed, min_starting
 
 if __name__ == "__main__":
     if len(sys.argv) != 9:
-        print("Usage: {} <seed>".format(sys.argv[0]))
+        print("Wrong number of arguments!")
         sys.exit(1)
 
     num_accounts = int(sys.argv[2])

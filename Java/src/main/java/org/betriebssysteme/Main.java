@@ -13,14 +13,20 @@ public class Main {
 
 
     public static void main(String[] args) {
-        numAccounts = 5; // Anzahl der Konten
-        numClients = 10; // Anzahl der Clients
-        numTransfersPerClient = 1000; // Anzahl der Anfragen pro Client
-        seed = "42"; // Seed zur Generierung der Zufallszahlen
-        minStartBalance = 0; // Minimale Startbetrag für Konten
-        maxStartBalance = 1000; // Maximale Startbetrag für Konten
-        minTransferAmount = 0; // Minimaler Betrag pro Überweisung
-        maxTransferAmount = 300; // Maximaler Betrag pro Überweisung
+        if(args.length != 8){
+            System.out.println("Wrong number of arguments!");
+            System.exit(1);
+        }
+
+
+        numAccounts = Integer.parseInt(args[1]); // Anzahl der Konten
+        numClients = Integer.parseInt(args[6]); // Anzahl der Clients
+        numTransfersPerClient = Integer.parseInt(args[7]); // Anzahl der Anfragen pro Client
+        seed = args[0]; // Seed zur Generierung der Zufallszahlen
+        minStartBalance = Integer.parseInt(args[2]); // Minimale Startbetrag für Konten
+        maxStartBalance = Integer.parseInt(args[3]); // Maximale Startbetrag für Konten
+        minTransferAmount = Integer.parseInt(args[4]); // Minimaler Betrag pro Überweisung
+        maxTransferAmount = Integer.parseInt(args[5]); // Maximaler Betrag pro Überweisung
 
 
         LCG randomSeedGenerator = new LCG(seed);

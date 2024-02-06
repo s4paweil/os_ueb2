@@ -80,7 +80,7 @@ def run_client(shm, num_operations, num_accounts, min_transfer_amount, max_trans
 
 if __name__ == "__main__":
     if len(sys.argv) != 9:
-        print("Usage: {} <seed>".format(sys.argv[0]))
+        print("Wrong number of arguments!")
         sys.exit(1)
 
     num_accounts = int(sys.argv[2])
