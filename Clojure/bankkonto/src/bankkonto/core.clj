@@ -41,25 +41,27 @@
     ))
 
 ; Erstellt eine angegebene Anzahl an Accounts und setzt den initalen Kontostand auf einen Wert zwischen 0 und 1000
-(defn create-server [num-accounts generator min-start-balance max-start-balance]
-  (let [accounts (atom (vec (repeatedly num-accounts #( get-next-number-between generator min-start-balance max-start-balance ))))]
+(defn create-server [num-accounts server-seed min-start-balance max-start-balance main-generator]
+  (let [generator (lcg-init server-seed)
+		accounts (atom (vec (repeatedly num-accounts #( get-next-number-between generator min-start-balance max-start-balance ))))]
     {:accounts accounts
-     :generator generator
+     :generator main-generator
      :transfer (partial transfer accounts)}))
 
 ; Definiert eine Funktion, die eine Überweisungsaufgabe für einen Client simuliert.
-(defn client-task [server num-transfers min-transfer-amount max-transfer-amount]
-  (let [transfer-fn (:transfer server)
+(defn client-task [server num-transfers min-transfer-amount max-transfer-amount client-seed]
+  (let [generator (lcg-init client-seed)
+		transfer-fn (:transfer server)
         num-accounts (count @(:accounts server))]
     (doseq [_ (range num-transfers)]
-      (let [k1 (get-next-number (:generator server) num-accounts)  
-            k2 (get-next-number (:generator server) num-accounts)
-            amount (get-next-number-between (:generator server) min-transfer-amount max-transfer-amount)]
+      (let [k1 (get-next-number generator num-accounts)  
+            k2 (get-next-number generator num-accounts)
+            amount (get-next-number-between generator min-transfer-amount max-transfer-amount)]
         (transfer-fn k1 k2 amount)))))
 
 ; Definiert eine Funktion zur Ausführung der Simulation mit einer bestimmten Anzahl von Clients und Überweisungen.
-(defn run-simulation [server num-clients num-transfers min-transfer-amount max-transfer-amount]
-  (let [client-tasks (vec (map (fn [_] (future (client-task server num-transfers min-transfer-amount max-transfer-amount))) (range num-clients)))]
+(defn run-simulation [server num-clients num-transfers min-transfer-amount max-transfer-amount generator]
+  (let [client-tasks (vec (map (fn [_] (future (client-task server num-transfers min-transfer-amount max-transfer-amount (get-next-number generator 1000)))) (range num-clients)))]
     (dorun (mapv deref client-tasks))))
 
 (defn print-accounts [accounts]
@@ -91,12 +93,13 @@
 		min-transfer-amount (Integer/parseInt min-transfer-amount-str)
 		max-transfer-amount (Integer/parseInt max-transfer-amount-str)
         generator (lcg-init seed)
-        server (create-server num-accounts generator min-start-balance max-start-balance)
+		server-seed (get-next-number generator 1000)
+        server (create-server num-accounts server-seed min-start-balance max-start-balance generator)
         accounts-start @(:accounts server)
         total-start (total-balance (:accounts server))]
 
     ;; Simulation starten
-    (run-simulation server num-clients num-transfers min-transfer-amount max-transfer-amount)
+    (run-simulation server num-clients num-transfers min-transfer-amount max-transfer-amount generator)
 
     ;; Zustände der Konten nach der Simulation speichern
     (let [accounts-end @(:accounts server)
