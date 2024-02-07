@@ -53,7 +53,10 @@ def run_simulation(num_accounts, num_clients, num_operations, seed, min_starting
                    min_transfer_amount, max_transfer_amount):
     random_generator = LCG(seed)
 
-    server = BankServer(num_accounts, min_starting_balance, max_starting_balance, random_generator.get_next_number(1000))
+    server_seed = random_generator.get_next_number(1000)
+    print(server_seed)
+
+    server = BankServer(num_accounts, min_starting_balance, max_starting_balance, server_seed)
     clients = [BankClient(server, num_operations, min_transfer_amount, max_transfer_amount, random_generator.get_next_number(1000)) for _ in range(num_clients)]
 
     threads = [threading.Thread(target=client.run_operations) for client in clients]

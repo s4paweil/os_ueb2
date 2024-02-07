@@ -106,7 +106,7 @@
           total-end (total-balance (:accounts server))
           differences (collect-account-differences accounts-start accounts-end)
           output (concat [total-start total-end] differences )
-          output-str (str total-start ", " total-end ", " clojure.string/join ", " output)]
+          output-str (clojure.string/join ", " output)]
           
       ;; Ausgabe der gesammelten Informationen als Zeichenkette 
       (println (str "[" (clojure.string/join ", " output) "]"))
